@@ -4,6 +4,10 @@ from ui.cadastro_view import cadastro_view
 from ui.users_view import users_view
 
 def main(page: ft.Page):
+    # Define o tamanho da janela
+    page.window_width = 500
+    page.window_height = 400
+    page.window_resizable = False
     create_table()
 
     def go_to_cadastro():

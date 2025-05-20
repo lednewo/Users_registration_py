@@ -3,7 +3,7 @@ from database import fetch_users, delete_user, update_user
 
 def users_view(page: ft.Page, go_to_cadastro):
     users_column = ft.Column()
-    search_input = ft.TextField(label="Buscar por nome", on_change=lambda e: load_users(search_input.value), width=300)
+    search_input = ft.TextField(label="Buscar por nome", width=300)
 
     def load_users(filter_text=""):
         users_column.controls.clear()
@@ -27,19 +27,33 @@ def users_view(page: ft.Page, go_to_cadastro):
                     name_field,
                     email_field,
                     ft.IconButton(icon=ft.icons.SAVE, tooltip="Salvar", on_click=update_user_data),
-                    ft.IconButton(icon=ft.icons.DELETE, tooltip="Excluir", on_click=delete_user_data)
-                ])
+                    ft.IconButton(icon=ft.icons.DELETE, tooltip="Excluir", icon_color="RED", on_click=delete_user_data)
+                ],
+                alignment="center"
+                )
                 users_column.controls.append(row)
         page.update()
 
+    search_input.on_change = lambda e: load_users(search_input.value)
+    load_users()
+
     return ft.View(
-        "/usuarios",
-        [
-            ft.Text("Lista de Usuários", size=24, weight="bold"),
-            ft.OutlinedButton(text="Voltar ao cadastro", on_click=lambda e: go_to_cadastro()),
-            ft.Divider(),
-            search_input,
-            users_column
+        route="/usuarios",
+        controls=[
+            ft.Container(
+                content=ft.Column(
+                    [
+                        ft.Text("Lista de Usuários", size=24, weight="bold"),
+                        ft.OutlinedButton(text="Voltar ao cadastro", on_click=lambda e: go_to_cadastro()),
+                        ft.Divider(),
+                        search_input,
+                        users_column
+                    ],
+                    alignment="center",
+                    horizontal_alignment="center"
+                ),
+                alignment=ft.alignment.center,
+                expand=True
+            )
         ],
-        on_view_pop=lambda e: load_users()  
     )

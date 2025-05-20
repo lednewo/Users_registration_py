@@ -11,10 +11,13 @@ def cadastro_view(page: ft.Page, go_to_users):
     def register_user(e):
         if not name_input.value.strip() or not email_input.value.strip() or not password_input.value.strip():
             message.value = "Preencha todos os campos."
+            message.color = ft.colors.RED
         elif "@" not in email_input.value or "." not in email_input.value:
             message.value = "Email inválido."
+            message.color = ft.colors.RED
         elif len(password_input.value) < 6:
             message.value = "A senha deve ter no mínimo 6 caracteres."
+            message.color = ft.colors.RED
         else:
             try:
                 insert_user(name_input.value.strip(), email_input.value.strip(), password_input.value)
@@ -30,15 +33,27 @@ def cadastro_view(page: ft.Page, go_to_users):
 
     return ft.View(
         "/cadastro",
-        [
-            ft.Text("Cadastro de Usuários", size=24, weight="bold"),
-            name_input,
-            email_input,
-            password_input,
-            ft.Row([
-                ft.ElevatedButton(text="Cadastrar", on_click=register_user),
-                ft.OutlinedButton(text="Ver usuários", on_click=lambda e: go_to_users()),
-            ]),
-            message
+        controls=[
+            ft.Container(
+                content=ft.Column(
+                    [
+                        ft.Text("Cadastro de Usuários", size=24, weight="bold"),
+                        name_input,
+                        email_input,
+                        password_input,
+                        ft.Row([
+                            ft.ElevatedButton(text="Cadastrar", on_click=register_user),
+                            ft.OutlinedButton(text="Ver usuários", on_click=lambda e: go_to_users()),
+                        ],
+                        alignment="center"
+                        ),
+                        message
+                    ],
+                    alignment="center",
+                    horizontal_alignment="center"
+                ),
+                alignment=ft.alignment.center,
+                expand=True
+            )
         ],
     )
